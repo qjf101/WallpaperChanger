@@ -1,0 +1,7 @@
+package-lock.json 
+/node_modules
+/client/node_modules
+/dist
+/client/build
+/public
+/client/public/images

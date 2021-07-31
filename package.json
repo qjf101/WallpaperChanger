@@ -1,0 +1,40 @@
+{
+  "name": "wallpaper-changer",
+  "version": "1.0.0",
+  "description": "A cross-platform app to change desktop wallpaper",
+  "main": "main.js",
+  "scripts": {
+    "client-install": "cd client && npm install",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"cross-env BROWSER=none npm run client\" \"wait-on http://localhost:3000 && cross-env NODE_ENV=development electron .\"",
+    "start": "npm run dev",
+    "electron-build": "electron-builder",
+    "build": "cross-env INLINE_RUNTIME_CHUNK=false npm run build --prefix client && npm run electron-build"
+  },
+  "author": "Quintus",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^6.2.0",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "electron-is-dev": "^2.0.0",
+    "express": "^4.17.1",
+    "fs-jetpack": "^4.1.0",
+    "node-fetch": "^2.6.1",
+    "wallpaper": "^5.0.1"
+  },
+  "devDependencies": {
+    "electron": "^12.0.14",
+    "electron-builder": "^22.11.7",
+    "nodemon": "^2.0.9",
+    "wait-on": "^6.0.0"
+  },
+  "build": {
+    "appId": "com.qjf101.wallpaperChanger",
+    "asar": true,
+    "files": [
+      "**/*"
+    ]
+  }
+}
