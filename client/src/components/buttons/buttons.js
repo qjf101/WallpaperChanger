@@ -17,7 +17,7 @@ class Buttons extends Component {
     const currentWallpaper = await fetch('http://localhost:5000/api/getCurrentWallpaper')
     const currentWallpaperPath = await currentWallpaper.text();
 
-    this.setState({imagePath : currentWallpaperPath});    
+    this.setState({imagePath : currentWallpaperPath}); 
   }
 
   // Call getCurrentWallpaper on app start for image preview
@@ -51,7 +51,12 @@ class Buttons extends Component {
     <div>
       <div className="wrapper">
         <div className="imgBox">
+          {this.state.imagePath ? (
           <img src={this.state.imagePath} alt="Wallaper"></img>
+          ) : (
+            <></>
+          )
+          }
           </div>
       </div>
       <div className='button'>
