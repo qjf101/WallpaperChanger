@@ -21,7 +21,7 @@ else{
   frontendFilePath = path.join(__dirname, '../../../public/images/image.jpg');
 }
 
-apiRoutes.get('/getCurrentWallpaper', cors(), async (req, res) => {
+apiRoutes.get('/getCurrentWallpaper', cors(), async (req, res, next) => {
   try{
     wallpaper.get().then((data) => {
       if (process.env.NODE_ENV === "development"){
@@ -37,7 +37,7 @@ apiRoutes.get('/getCurrentWallpaper', cors(), async (req, res) => {
   }
 }) 
 
-apiRoutes.get('/getNewWallpaper', cors(), async (req, res) => {
+apiRoutes.get('/getNewWallpaper', cors(), async (req, res, next) => {
   try{
     const apiRequestUrl = 'https://wallhaven.cc/api/v1/search?resolutions=1920x1080'; 
     const apiResponse = await fetch(apiRequestUrl);
@@ -64,7 +64,7 @@ apiRoutes.get('/getNewWallpaper', cors(), async (req, res) => {
     }
 })
 
-apiRoutes.get('/setWallpaper', cors(), async (req, res) => {
+apiRoutes.get('/setWallpaper', cors(), async (req, res, next) => {
   try{
     console.log('updating wallpaper')
     await wallpaper.set(backendFilePath, 'all', 'fill').then(() =>
@@ -76,7 +76,7 @@ apiRoutes.get('/setWallpaper', cors(), async (req, res) => {
   }
 })
 
-apiRoutes.get('/saveWallpaper', cors(), async (req, res) => {
+apiRoutes.get('/saveWallpaper', cors(), async (req, res, next) => {
 
 })
  
