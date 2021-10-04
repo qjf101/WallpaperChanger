@@ -23,8 +23,14 @@ else{
 
 apiRoutes.get('/getCurrentWallpaper', cors(), async (req, res) => {
   try{
-    wallpaper.get().then((data) =>
-    res.send(data))
+    wallpaper.get().then((data) => {
+      if (process.env.NODE_ENV === "development"){
+        jetpack.copyAsync(data, './client/public/images/current.jpg', { overwrite: true }).then(() =>
+        res.send('../images/current.jpg'));
+      } else {
+        res.send(data)
+      }
+    })
   } 
   catch(e) {
     next(createError(500, e))
