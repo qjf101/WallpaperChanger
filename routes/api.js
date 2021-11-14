@@ -6,11 +6,13 @@ const jetpack = require('fs-jetpack');
 const path = require('path');
 const fetch = require("node-fetch");
 const wallpaper = require('wallpaper');
+const { dialog } = require('electron');
 
 const apiRoutes = express.Router();
 
 let backendFilePath = '';
 let frontendFilePath = '';
+let savedWallpaper = null;
 
 if (process.env.NODE_ENV === "development") {
   backendFilePath = './client/public/images/image.jpg';
@@ -55,7 +57,7 @@ apiRoutes.get('/getNewWallpaper', cors(), async (req, res, next) => {
 
     fetch(url)
       .then(response => response.buffer())
-      .then(buffer => jetpack.writeAsync(backendFilePath, buffer))
+      .then(buffer => { jetpack.writeAsync(backendFilePath, buffer); savedWallpaper = buffer })
       .then(() =>
         res.send(frontendFilePath));
   }
@@ -77,7 +79,32 @@ apiRoutes.get('/setWallpaper', cors(), async (req, res, next) => {
 })
 
 apiRoutes.get('/saveWallpaper', cors(), async (req, res, next) => {
+  try {
+    console.log('opening save dialog')
+    const { filePath, canceled } = await dialog.showSaveDialog({
+      defaultPath: "Wallpaper.jpg", buttonLabel: "Save Wallpaper", filters: [
+        { name: 'Image', extensions: ['jpg'] }
+      ]
+    });
 
+    if (savedWallpaper == null) {
+      res.send('Get a new wallpaper before saving.')
+      console.log('Get a new wallpaper before saving.')
+    }
+    else if (canceled) {
+      res.send('canceled')
+    }
+    else if (filePath && !canceled) {
+      console.log('saving wallpaper')
+      jetpack.writeAsync(filePath, savedWallpaper)
+        .then(
+          res.send(`Wallpaper saved to: ${filePath}`)
+        );
+    }
+  }
+  catch (e) {
+    next(createError(500, e))
+  }
 })
 
 
