@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import './buttons.css';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class Buttons extends Component {
 
   state = {
-    imagePath: ''
+    imagePathPre: null,
+    imagePath: null
   };
 
   // Updates image file path to be used for the image preview
@@ -17,7 +20,7 @@ class Buttons extends Component {
     const currentWallpaper = await fetch('http://localhost:5000/api/getCurrentWallpaper')
     const currentWallpaperPath = await currentWallpaper.text();
 
-    this.setState({imagePath : currentWallpaperPath}); 
+    this.setState({imagePathPre : currentWallpaperPath}); 
   }
 
   // Call getCurrentWallpaper on app start for image preview
@@ -43,16 +46,21 @@ class Buttons extends Component {
 
   // Save wallpaper after getting a new wallpaper
   saveWallpaper = async () => {
-    // fetch('http://localhost:5000/api/saveWallpaper');
+    fetch('http://localhost:5000/api/saveWallpaper');
   }
+
+  customId = "custom-id-yes";
+  notify = () => toast("Get a new wallpaper before saving.", {
+    toastId: this.customId
+  });
     
   render() {
     return (
     <div>
       <div className="wrapper">
         <div className="imgBox">
-          {this.state.imagePath ? (
-          <img src={this.state.imagePath} alt="Wallaper"></img>
+          {this.state.imagePath || this.state.imagePathPre ? (
+          <img src={this.state.imagePath || this.state.imagePathPre} alt="Wallaper"></img>
           ) : (
             <></>
           )
@@ -67,9 +75,10 @@ class Buttons extends Component {
         <button onClick={this.setWallpaper}>
           Set
         </button>
-        <button onClick={this.saveWallpaper}>
+        <button onClick={this.state.imagePath ? this.saveWallpaper : this.notify}>
           Save
         </button>
+        <ToastContainer />
       </div>
       </div>
     </div>

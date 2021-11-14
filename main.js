@@ -9,13 +9,12 @@ let mainWindow;
 function createWindow () {
 
   mainWindow = new BrowserWindow({
-    minWidth: 512,
-    minHeight: 640,
-    maxWidth: 512,
-    maxHeight: 640,
+    width: 512,
+    height: 640,
     webPreferences: {
       nodeIntegration: true
-    }
+    },
+    resizable: false
   })
 
   mainWindow.loadURL(
